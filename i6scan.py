@@ -8,7 +8,7 @@ import threading
 import subprocess
 
 ipPool = []               #build a global buffer to buffer ip adderss
-f1=open("result1.txt","w")
+f1=open("result.txt","a")
 class SendPingThr(threading.Thread):    # send thread
     def __init__(self,icmpPacket, icmpSocket):
         threading.Thread.__init__(self)
@@ -22,7 +22,7 @@ class SendPingThr(threading.Thread):    # send thread
             i = i+1
             try:
                 print i
-                print ipPool[i]
+                #print ipPool[i]
                 self.sock.sendto(self.packet,(ipPool[i],0))#sendto the specified  ipaddress ipPool[i]
                 time.sleep(0.01)
             except:
@@ -63,10 +63,8 @@ class Nscan:
             finally:
                 if not sendThr.isAlive():
                     break
-        #print recvFroms[0]
-		#tmp = [val for val in ipPool if val in recvFroms]
-        #result.append(tmp)
         recvFroms = set(recvFroms)  #convert the list (recvFroms)
+        #print recvFroms
         ipPool = set(ipPool)
         result = ipPool & recvFroms #check the result of receive  & with the ipPool
         result1 =[i for i in result]
@@ -75,13 +73,15 @@ class Nscan:
             try:
                 tt = tt+1
                 print result1[tt]
+                #f1=open("result3.txt","a")
                 f1.write(result1[tt]+"\n")#write to f1
+                #f1.close()
             except:
                 break
-
+        f1.close()
 if __name__=='__main__':
     s = Nscan()
-    f = open("ip_prefix1.txt","r") #read the prefix to generate the whole ip address
+    f = open("ip_prefix.txt","r") #read the prefix to generate the whole ip address
     for i in f:
         tmp = i.split()
         l = 0
@@ -98,6 +98,6 @@ if __name__=='__main__':
                 else:
                     str1 = tmp[l]+"::"+s3+":"+s4 # the form of ip
                 ipPool.append(str1)
-                print str1
+                #print str1
         l = l+1
     s.mPing(ipPool)
