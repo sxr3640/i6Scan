@@ -39,7 +39,6 @@ def func():
         s3 = s3.lstrip("0x")
         s4 = s4.lstrip("0x")
 
-        #print s1
         i = i + 1
         j = i % 5
         print i
